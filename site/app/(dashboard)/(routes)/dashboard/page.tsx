@@ -1,11 +1,7 @@
-import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-import { UserButton } from '@clerk/nextjs'
 const DashboardPage = () => {
   return (
     <div>
-      <Button size="lg">click fuxk</Button>
-      <UserButton afterSignOutUrl="/"/>
+      <p>이것은 페이지 입니다.</p>
     </div>
   )
 }
