@@ -39,7 +39,7 @@ const converstaionPage = () => {
 
                         </form>
                     </Form>
-                    <FormField name="prompt"
+                    {/* <FormField name="prompt"
                         render={({ field }) => (
                             <FormItem className="col-span-12 lg:col-span-10">
                                 <FormControl className="m-0 p-0">
@@ -48,7 +48,7 @@ const converstaionPage = () => {
                                         placeholder="How do i calculate the radius of a circle"/>
                                 </FormControl>
                             </FormItem>
-                        )} />
+                        )} /> */}
                 </div>
             </div>
         </div>
