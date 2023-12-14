@@ -6,29 +6,29 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Axios from "axios"
-import { MessageSquare } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Code } from "lucide-react";
 
 import { Heading } from "@/components/heading"
-import { formSchema } from "./converstaion";
+import { amountOptions, formSchema } from "./converstaion";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form"
-import * as openai from 'openai/resources/index.mjs';
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/Loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem } from "@/components/ui/select"
+import { SelectTrigger, SelectValue } from "@radix-ui/react-select";
 
 const ConversationPage = () => {
     const router = useRouter();
-    const [messages, setMessages] = useState<openai.ChatCompletionMessageParam[]>([])
+    const [images, setImages] = useState<string[]>([]);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            prompt: ""
+            prompt: "",
+            amount: "1",
+            resolution: "512x512"
         }
     });
 
@@ -36,18 +36,10 @@ const ConversationPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const userMessage = {
-                role: 'user',
-                content: values.prompt,
-            }
-
-            const newMessages = [...messages, userMessage]
-
-            const responce = await Axios.post("/api/converstaion", {
-                messages: newMessages,
-            });
-            setMessages((current) => [...current, userMessage, responce.data])
-
+            setImages([])
+            const responce = await Axios.post("/api/image", values);
+            const urls = responce.data.map((image: { url: String }) => { image.url })
+            setImages(urls)
             form.reset();
         } catch (error: any) {
             console.log(error);
@@ -59,11 +51,11 @@ const ConversationPage = () => {
     return (
         <div>
             <Heading
-                title="conversation"
-                description="our advanced conversation model."
-                icon={MessageSquare}
-                iconcolor="text-violet-500"
-                bgcolor="bg-violet-500/10"
+                title="Code Generation"
+                description="Generate code using descriptive text."
+                icon={Code}
+                iconcolor="text-green-500"
+                bgcolor="bg-green-500/10"
             />
             <div className="px-4 lg:px-8">
                 <Form {...form}>
@@ -79,13 +71,45 @@ const ConversationPage = () => {
                                         <Input
                                             className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                             disabled={isLoading}
-                                            placeholder="How do I calculate the radius of a circle"
+                                            placeholder="A picture of a horse in Swissapls"
                                             {...field}
                                         />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="amount"
+                            render={({field}) => (
+                                <FormItem className="col-span-12 lg:col-span-6">
+                                    <Select
+                                        disabled={isLoading}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue>
+                                                    <SelectValue defaultValue={field.value}/>
+                                                </SelectValue>
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {amountOptions.map((option) => {
+                                                <SelectItem
+                                                key={option.value}
+                                                value={option.value}>
+                                                    {option.label}
+                                                </SelectItem>
+                                            })}
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                            >
+
+                        </FormField>
                         <Button className="col-span-12 lg:col-span-2" disabled={isLoading}>
                             Generation
                         </Button>
@@ -100,22 +124,9 @@ const ConversationPage = () => {
                         </div>
                     )
                 }
-                {messages.length === 0 && !isLoading && (
+                {images.length === 0 && !isLoading && (
                     <Empty />
                 )}
-                <div className="flex flex-col-reverse gap-y-4">
-                    {messages.map((message) => (
-                        // eslint-disable-next-line
-                        <div
-                            className={cn("p-8 w-full flex items-start gap-x-8 rounded-log", message.role === 'user' ? "bg-white border border-black/10" : "bg-muted")}
-                            key={message.content}>
-                            {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                            <p className="text-sm">
-                                {message.content}
-                            </p>
-                        </div>
-                    ))}
-                </div>
             </div>
         </div>
     );

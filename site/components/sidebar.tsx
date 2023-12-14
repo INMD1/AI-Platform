@@ -17,37 +17,37 @@ const routes = [
     {
         label: "Converstaion",
         icon: MessageSquare,
-        href: "/dashboard",
+        href: "/converstaion",
         color: "text-violet-500"
     },
     {
         label: "Image Generation",
         icon: ImageIcon,
-        href: "/dashboard",
+        href: "/image",
         color: "text-red-500"
     },
     {
         label: "Video Generation",
         icon: VideoIcon,
-        href: "/dashboard",
+        href: "/video",
         color: "text-orange-500"
     },
     {
         label: "Music Generation",
         icon: MusicIcon,
-        href: "/dashboard",
+        href: "/music",
         color: "text-green-500"
     },
     {
         label: "Code Generation",
         icon: CodeIcon,
-        href: "/dashboard",
+        href: "/code",
         color: "text-green-500"
     },
     {
         label: "Setting",
         icon: Settings,
-        href: "/dashboard",
+        href: "/settings",
         color: "text-white-500"
     },
 ]

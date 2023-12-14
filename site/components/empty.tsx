@@ -10,10 +10,10 @@ export const Empty = () => {
             <div className="relative h-72 w-72">
                 <Image alt="Empty"
                 fill
-                src="/images.png">
+                src="/images.png"/>
                 
-                </Image>
             </div>
+            <p className="text-muted-forgroind">없서요? 네! 없서요!</p>
         </div>
     )
 }

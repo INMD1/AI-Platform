@@ -8,8 +8,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Axios from "axios"
-import { MessageSquare } from "lucide-react";
+import { Code } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown"
 
 import { Heading } from "@/components/heading"
 import { formSchema } from "./converstaion";
@@ -22,7 +23,7 @@ import { Loader } from "@/components/Loader";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 
-const ConversationPage = () => {
+const codepage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<openai.ChatCompletionMessageParam[]>([])
     const form = useForm<z.infer<typeof formSchema>>({
@@ -43,7 +44,7 @@ const ConversationPage = () => {
 
             const newMessages = [...messages, userMessage]
 
-            const responce = await Axios.post("/api/converstaion", {
+            const responce = await Axios.post("/api/code", {
                 messages: newMessages,
             });
             setMessages((current) => [...current, userMessage, responce.data])
@@ -59,11 +60,11 @@ const ConversationPage = () => {
     return (
         <div>
             <Heading
-                title="conversation"
-                description="our advanced conversation model."
-                icon={MessageSquare}
-                iconcolor="text-violet-500"
-                bgcolor="bg-violet-500/10"
+                title="Code Generation"
+                description="Generate code using descriptive text."
+                icon={Code}
+                iconcolor="text-green-500"
+                bgcolor="bg-green-500/10"
             />
             <div className="px-4 lg:px-8">
                 <Form {...form}>
@@ -79,7 +80,7 @@ const ConversationPage = () => {
                                         <Input
                                             className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                             disabled={isLoading}
-                                            placeholder="How do I calculate the radius of a circle"
+                                            placeholder="Simple toggle button using react hooks."
                                             {...field}
                                         />
                                     </FormControl>
@@ -109,9 +110,25 @@ const ConversationPage = () => {
                         <div
                             className={cn("p-8 w-full flex items-start gap-x-8 rounded-log", message.role === 'user' ? "bg-white border border-black/10" : "bg-muted")}
                             key={message.content}>
-                            {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                            {message.role != "user" && <BotAvatar />}
                             <p className="text-sm">
-                                {message.content}
+                                <ReactMarkdown
+                                components={{
+                                    pre: ({node, ...props}) => (
+                                        <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
+                                            <pre {...props}/>
+                                        </div>
+                                    ),
+                                    code: ({node, ...props}) => (
+                                        <div className="bg-black/10 p-1 rounded-lg p-1">
+                                            <code {...props}/>
+                                        </div>
+                                    ),
+                                }}
+                                className="text-sm overflow-hidden leading-7" >
+                                    {message.content || ""}
+                                </ReactMarkdown>
+
                             </p>
                         </div>
                     ))}
@@ -121,4 +138,4 @@ const ConversationPage = () => {
     );
 };
 
-export default ConversationPage;
+export default codepage;
