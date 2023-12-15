@@ -39,7 +39,7 @@ export async function POST(
             {
                 prompt,
                 n: parseInt(amount,10),
-                size: resolution
+                size: resolution,
             }
         )
         return NextResponse.json(response.data);

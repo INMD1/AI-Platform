@@ -41,10 +41,10 @@ const Imagepage = () => {
         try {
             setImages([])
             const responce = await Axios.post("/api/image", values);
-            const urls = responce.data.map((image: { url: String }) => { image.url })
-            console.log(urls);
+            const urls = responce.data.map((image: { url: String }) => image.url )
             
             setImages(urls)
+            console.log(images);
             form.reset();
         } catch (error: any) {
             console.log(error);
