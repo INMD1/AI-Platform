@@ -8,3 +8,6 @@ AI-Platform
     //본 사이트 파일 구조
 ```
 
+데이터베이스 주소
+
+DATABASE_URL="mysql://ubuntu:********!@113.***.230.**:5959/test"
