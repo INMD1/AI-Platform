@@ -1,5 +1,7 @@
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from "next/server";
+import { increaseApiLimit, CheckApiLimit } from '@/lib/api-limit';
+
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 const openapi = new OpenAI({
@@ -35,6 +37,14 @@ export async function POST(
             return new NextResponse("Resolution are required", { status: 400 });
         }
 
+        const freeTrial = await CheckApiLimit()
+
+        if(!freeTrial){
+            return new NextResponse("Free trial has expired", {
+                status: 403
+            })
+        }
+
         const response = await openapi.images.generate(
             {
                 prompt,
@@ -42,6 +52,9 @@ export async function POST(
                 size: resolution,
             }
         )
+
+        await increaseApiLimit();
+        
         return NextResponse.json(response.data);
 
     } catch (error) {
