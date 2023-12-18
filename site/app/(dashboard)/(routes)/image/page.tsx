@@ -22,8 +22,10 @@ import { Select, SelectContent, SelectItem } from "@/components/ui/select"
 import { SelectTrigger, SelectValue } from "@radix-ui/react-select";
 import { Card, CardFooter } from "@/components/ui/card";
 import { optimizeImage } from "next/dist/server/image-optimizer";
+import { useProModal } from "@/hook/use-pro-modal";
 
 const Imagepage = () => {
+    const proModal = useProModal();
     const router = useRouter();
     const [images, setImages] = useState<string[]>([]);
     const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +49,9 @@ const Imagepage = () => {
             console.log(images);
             form.reset();
         } catch (error: any) {
+            if(error?.response?.status === 403){            
+                proModal.onOpen();
+            }
             console.log(error);
 
         } finally {

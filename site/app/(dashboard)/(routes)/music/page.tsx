@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Axios from "axios"
 import { MessageSquare } from "lucide-react";
-i
+
 import { Heading } from "@/components/heading"
 import { formSchema } from "./converstaion";
 import { Input } from "@/components/ui/input"
@@ -18,9 +18,11 @@ import { Form, FormField, FormItem, FormControl } from "@/components/ui/form"
 import * as openai from 'openai/resources/index.mjs';
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/Loader";
+import { useProModal } from "@/hook/use-pro-modal";
 
 
 const musicPage = () => {
+    const proModal = useProModal();
     const router = useRouter();
     const [music, setMusic] = useState<openai.ChatCompletionMessageParam[]>([])
     const form = useForm<z.infer<typeof formSchema>>({
@@ -37,6 +39,9 @@ const musicPage = () => {
 
             form.reset();
         } catch (error: any) {
+            if(error?.response?.status === 403){            
+                proModal.onOpen();
+            }
             console.log(error);
 
         } finally {

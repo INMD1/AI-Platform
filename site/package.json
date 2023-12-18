@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.27.4",
+    "@clerk/nextjs": "^4.28.1",
     "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.7.0",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -23,14 +23,16 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.294.0",
-    "next": "14.0.3",
+    "next": "^14.0.5-canary.17",
     "openai": "^4.20.1",
+    "or": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.0",
     "react-markdown": "^9.0.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
+    "typewriter-effect": "^2.21.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },
