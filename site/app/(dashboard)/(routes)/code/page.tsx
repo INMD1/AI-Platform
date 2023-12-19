@@ -3,9 +3,9 @@
 
 import * as z from "zod"
 
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Axios from "axios"
 import { Code } from "lucide-react";
@@ -23,7 +23,7 @@ import { Loader } from "@/components/Loader";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 
-const codepage = () => {
+const Codepage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<openai.ChatCompletionMessageParam[]>([])
     const form = useForm<z.infer<typeof formSchema>>({
@@ -109,9 +109,11 @@ const codepage = () => {
                         // eslint-disable-next-line
                         <div
                             className={cn("p-8 w-full flex items-start gap-x-8 rounded-log", message.role === 'user' ? "bg-white border border-black/10" : "bg-muted")}
-                            key={message.content}>
+                           key={String(message.content)}
+>
                             {message.role != "user" && <BotAvatar />}
                             <p className="text-sm">
+                                
                                 <ReactMarkdown
                                 components={{
                                     pre: ({node, ...props}) => (
@@ -126,7 +128,7 @@ const codepage = () => {
                                     ),
                                 }}
                                 className="text-sm overflow-hidden leading-7" >
-                                    {message.content || ""}
+                                    {String(message.content) || ""}
                                 </ReactMarkdown>
 
                             </p>
@@ -138,4 +140,4 @@ const codepage = () => {
     );
 };
 
-export default codepage;
+export default Codepage;

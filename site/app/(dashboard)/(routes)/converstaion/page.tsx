@@ -113,10 +113,10 @@ const ConversationPage = () => {
                         // eslint-disable-next-line
                         <div
                             className={cn("p-8 w-full flex items-start gap-x-8 rounded-log", message.role === 'user' ? "bg-white border border-black/10" : "bg-muted")}
-                            key={message.content}>
+                            key={String(message.content)}>
                             {message.role != "user" && <BotAvatar />}
                             <p className="text-sm">
-                                {message.content}
+                                {String(message.content)}
                             </p>
                         </div>
                     ))}

@@ -14,7 +14,7 @@ const font = Montserrat({
 })
 
 export const LandingNavbar = () => {
-    const { isSignedIn } = useAuth
+    const { isSignedIn } = useAuth()
 
     return(
         <div className="p-4 bg-transparent flex items-center justify-between">
